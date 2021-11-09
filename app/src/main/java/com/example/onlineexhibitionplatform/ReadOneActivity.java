@@ -9,9 +9,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.onlineexhibitionplatform.databinding.ActivityCreateBinding;
+
 import com.example.onlineexhibitionplatform.databinding.ActivityReadOneBinding;
 
+/*
+시로 작성된 데이터 받아와서 화면에 배치하기
+툴바 기능
+    1. 뒤로가기 버튼
+    2. option menu
+        1. 수정하기(update)
+        2. 삭제하기(delete)
+*/
 public class ReadOneActivity extends AppCompatActivity {
 
     private ActivityReadOneBinding binding;
@@ -25,13 +33,11 @@ public class ReadOneActivity extends AppCompatActivity {
 //        setContentView(R.layout.activity_read_one);
         setSupportActionBar(binding.toolbar);
 
-//        //Toolbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_close_24); // X 아이콘
 
-        //해당 액티비티의 툴바에 있는 타이틀을 공백으로 처리
+        // 해당 액티비티의 툴바에 있는 타이틀을 공백으로 처리
         getSupportActionBar().setTitle("");
 
+        // 툴바의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24); // <- 아이콘
