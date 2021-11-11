@@ -38,6 +38,16 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         tools:text="글쓴이" />
 
+    <TextView
+        android:id="@+id/tv_updated_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="14sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="2021.11.11 04:17" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

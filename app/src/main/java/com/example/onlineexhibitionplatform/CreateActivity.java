@@ -6,16 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.onlineexhibitionplatform.databinding.ActivityCreateBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /*
 시 작성할 데이터 입력하기
 툴바 기능
@@ -25,6 +27,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class CreateActivity extends AppCompatActivity {
 
     private ActivityCreateBinding binding;
+
+    private ResponseReadOneData data;
+    private ResponseReadOneData.Data dataInfo;
 
     // editText에 내용이 작성됐는지 확인하는 변수
     Boolean title_boolean = false;
@@ -36,7 +41,7 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // 바인딩
         binding = ActivityCreateBinding.inflate(getLayoutInflater()); // 1
-        setContentView(binding.getRoot()); // 2
+//        setContentView(binding.getRoot()); // 2
 //        setContentView(R.layout.activity_create);
 
         // Toolbar 붙이기
@@ -106,23 +111,12 @@ public class CreateActivity extends AppCompatActivity {
                 // 모든 editText에 내용이 작성됐을 경우
                 if(title_boolean && author_boolean && content_boolean){
                     /* 저장하기 Logic*/
-                    Toast.makeText(getApplicationContext(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "저장하였습니다.", Toast.LENGTH_SHORT).show();
 
-                    // 버튼 클릭시 열리는 화면(ReadOneActivity.class)
-                    Intent intent = new Intent(CreateActivity.this, ReadOneActivity.class);
 
-                    // 다른 액티비티에 데이터 전달하기
-                    // 데이터를 받는 쪽에서는 intent.getStringExtra("contact_title")처럼 변수명으로 데이터를 가져옴
-                    intent.putExtra("contact_title", binding.titleEditText.getText().toString());
-                    intent.putExtra("contact_author", binding.authorEditText.getText().toString());
-                    intent.putExtra("contact_content", binding.contentEditText.getText().toString());
+                    // 서버에 데이터 전송
+                    initNetwork();
 
-                    // ReadOneActivity.class 시작
-                    startActivity(intent);
-
-                    // CreateAcitivity 종료
-                    // ReadOneActivity에서 백스탭하면 MainActivity로 이동
-                    finish();
 
                 }
                 else{
@@ -139,6 +133,8 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
+
+        setContentView(binding.getRoot()); // 2
     }// onCreate() 끝
 
     // X 아이콘 클릭시
@@ -147,6 +143,66 @@ public class CreateActivity extends AppCompatActivity {
         finish(); // close this activity as oppose to navigating up
 
         return false;
+    }
+
+    private void initNetwork() {
+        Log.d("CreatActivity", "[binding.titleEditText.toString()]"+binding.titleEditText.toString());
+        RequestCreateData requestCreateData = new RequestCreateData(
+                binding.titleEditText.getText().toString(), binding.authorEditText.getText().toString(), binding.contentEditText.getText().toString()
+        );
+
+        Call<ResponseReadOneData> call = ServiceCreator.getApiService().createPost(requestCreateData);
+
+        call.enqueue(new Callback<ResponseReadOneData>() {
+            @Override
+            public void onResponse(Call<ResponseReadOneData> call, Response<ResponseReadOneData> response) {
+                // 서버로 부터 응답 성공
+                if(response.isSuccessful() && response.body() != null) {
+                    ResponseReadOneData data = response.body();
+                    dataInfo = data.databody;
+
+                    Log.d("CreateActivity", "[data]" + data.toString());
+                    Log.d("CreateActivity", "[dataInfo]" + dataInfo.toString());
+                    Log.d("CreateActivity", "[dataInfo.title]" + dataInfo.title);
+                    Toast.makeText(getApplicationContext(), dataInfo.title + " 저장 성공", Toast.LENGTH_SHORT).show();
+
+                    // 버튼 클릭시 열리는 화면(ReadOneActivity.class)
+                    Intent intent = new Intent(CreateActivity.this, ReadOneActivity.class);
+
+
+                    intent.putExtra("contact_title", dataInfo.title);
+                    intent.putExtra("contact_author", dataInfo.author);
+                    intent.putExtra("contact_content", dataInfo.content);
+
+                    // 다른 액티비티에 데이터 전달하기
+                    // 데이터를 받는 쪽에서는 intent.getStringExtra("contact_title")처럼 변수명으로 데이터를 가져옴
+//                    intent.putExtra("contact_title", binding.titleEditText.getText().toString());
+//                    intent.putExtra("contact_author", binding.authorEditText.getText().toString());
+//                    intent.putExtra("contact_content", binding.contentEditText.getText().toString());
+
+                    // ReadOneActivity.class 시작
+                    startActivity(intent);
+
+                    // CreateAcitivity 종료
+                    // ReadOneActivity에서 백스탭하면 MainActivity로 이동
+                    finish();
+
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "저장에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                    Log.d("NetworkTest", response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseReadOneData> call, Throwable t) {
+                Log.d("NetworkTest", "error: "+ t);
+                t.printStackTrace();
+                Toast.makeText(getApplicationContext(), ""+t, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
 }
