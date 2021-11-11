@@ -71,11 +71,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
         return (null != userList ? userList.size() : 0);
     }
 
-    // data 모델의 객체들을 list에 저장
-    public void setmovieList(ArrayList<UserData> list){
-        this.userList = list;
-        notifyDataSetChanged();
-    }
+
 
 
 }
