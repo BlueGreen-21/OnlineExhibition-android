@@ -1,12 +1,16 @@
 package com.example.onlineexhibitionplatform;
 
-public class UserData {
+import com.google.gson.annotations.SerializedName;
+
+public class RequestCreateData {
     String title;
     String author;
+    String content;
 
-    public UserData(String title, String author) {
+    public RequestCreateData(String title, String author, String content) {
         this.title = title;
         this.author = author;
+        this.content = content;
     }
 
     public String getTitle() {
@@ -23,5 +27,13 @@ public class UserData {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

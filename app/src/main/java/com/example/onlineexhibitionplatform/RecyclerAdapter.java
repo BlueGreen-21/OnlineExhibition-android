@@ -7,12 +7,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private ArrayList<UserData> userList;
+//    private ArrayList<UserData> userList;
+    private ArrayList<ResponseReadList.Data> userList;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -21,6 +21,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         protected TextView tvTitle;
         protected TextView tvAuthor;
+        protected TextView tvUpdatedAt;
 
 
         public ViewHolder(View view) {
@@ -29,6 +30,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
 
             this.tvTitle = (TextView) view.findViewById(R.id.tv_title);
             this.tvAuthor = (TextView) view.findViewById(R.id.tv_author);
+            this.tvUpdatedAt = (TextView) view.findViewById(R.id.tv_updated_at);
         }
 
     }
@@ -39,7 +41,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
      * @param dataSet ArrayList<UserData> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public PoemAdapter(ArrayList<UserData> dataSet) {
+    public RecyclerAdapter(ArrayList<ResponseReadList.Data> dataSet) {
         this.userList = dataSet;
     }
 
@@ -63,6 +65,8 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
         // contents of the view with that element
         viewHolder.tvTitle.setText(userList.get(position).getTitle());
         viewHolder.tvAuthor.setText(userList.get(position).getAuthor());
+        viewHolder.tvUpdatedAt.setText(userList.get(position).getUpdated_at());
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
